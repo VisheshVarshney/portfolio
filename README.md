@@ -1,6 +1,6 @@
 # Vishesh Varshney Portfolio
 
-A modern, interactive portfolio website built with React, TypeScript, and Vite, featuring a stunning 3D network background effect and smooth animations.
+My modern portfolio, feel free to fork! Don't forget to star!
 
 ## Features
 
