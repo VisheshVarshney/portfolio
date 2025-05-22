@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Hide default cursor */
+* {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  @apply fixed w-4 h-4 border-2 border-white rounded-full pointer-events-none z-50 mix-blend-difference;
+  transition: transform 0.2s ease;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom selection color */
+::selection {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
