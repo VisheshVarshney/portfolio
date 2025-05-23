@@ -88,6 +88,7 @@ function App() {
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
   const vantaRef = useRef<HTMLDivElement>(null);
   const [vantaEffect, setVantaEffect] = useState<any>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const backdropBlur = useTransform(
     scrollYProgress,
     [0, 0.25],
@@ -208,6 +209,28 @@ function App() {
       isExternal: false,
     },
   ];
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const response = await fetch('https://formspree.io/f/mzzzyjjj', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        setFormSubmitted(true);
+        (e.target as HTMLFormElement).reset();
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
 
   return (
     <div ref={vantaRef} className="min-h-screen text-white overflow-x-hidden">
@@ -348,68 +371,89 @@ function App() {
             Contact
           </h2>
           <div className="max-w-2xl mx-auto">
-            <motion.form
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="space-y-6"
-              action="https://formspree.io/f/mzzzyjjj"
-              method="POST"
-            >
-              <div>
-                <label
-                  className="block text-xl mb-2"
-                  style={{ fontFamily: "'Clash Display', sans-serif" }}
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-white/30"
-                  style={{ fontFamily: "'Satoshi', sans-serif" }}
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  className="block text-xl mb-2"
-                  style={{ fontFamily: "'Clash Display', sans-serif" }}
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-white/30"
-                  style={{ fontFamily: "'Satoshi', sans-serif" }}
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  className="block text-xl mb-2"
-                  style={{ fontFamily: "'Clash Display', sans-serif" }}
-                >
-                  Message
-                </label>
-                <textarea
-                  name="message"
-                  rows={4}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-white/30"
-                  style={{ fontFamily: "'Satoshi', sans-serif" }}
-                  required
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-white/10 hover:bg-white/20 text-white py-4 px-8 rounded-lg flex items-center justify-center gap-2 transition-all"
-                style={{ fontFamily: "'Clash Display', sans-serif" }}
+            {formSubmitted ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white/5 p-8 rounded-2xl backdrop-blur-sm text-center"
               >
-                <Send className="w-5 h-5" />
-                Send Message
-              </button>
-            </motion.form>
+                <h3 
+                  className="text-2xl font-bold mb-4"
+                  style={{ fontFamily: "'Clash Display', sans-serif" }}
+                >
+                  Thank you for your message!
+                </h3>
+                <p 
+                  className="text-lg text-gray-300"
+                  style={{ fontFamily: "'Satoshi', sans-serif" }}
+                >
+                  I'll reply to your email as soon as possible.
+                </p>
+              </motion.div>
+            ) : (
+              <motion.form
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6"
+                onSubmit={handleSubmit}
+              >
+                <div>
+                  <label
+                    className="block text-xl mb-2"
+                    style={{ fontFamily: "'Clash Display', sans-serif" }}
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-white/30"
+                    style={{ fontFamily: "'Satoshi', sans-serif" }}
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    className="block text-xl mb-2"
+                    style={{ fontFamily: "'Clash Display', sans-serif" }}
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-white/30"
+                    style={{ fontFamily: "'Satoshi', sans-serif" }}
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    className="block text-xl mb-2"
+                    style={{ fontFamily: "'Clash Display', sans-serif" }}
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    rows={4}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-white/30"
+                    style={{ fontFamily: "'Satoshi', sans-serif" }}
+                    required
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-white/10 hover:bg-white/20 text-white py-4 px-8 rounded-lg flex items-center justify-center gap-2 transition-all"
+                  style={{ fontFamily: "'Clash Display', sans-serif" }}
+                >
+                  <Send className="w-5 h-5" />
+                  Send Message
+                </button>
+              </motion.form>
+            )}
 
             <div className="flex justify-center gap-8 mt-12">
               <a
