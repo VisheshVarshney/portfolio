@@ -176,7 +176,7 @@ function App() {
       description:
         'A comprehensive social media platform for college students, facilitating connections and information sharing.',
       icon: Code,
-      status: 'In Progress',
+      status: 'Completed',
       link: 'https://mujconnect.in/',
       isExternal: true,
     },
